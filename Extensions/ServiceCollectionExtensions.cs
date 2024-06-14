@@ -42,7 +42,11 @@ namespace ColorPaletteGeneratorApi.Extensions
 
             services.AddAuthorization();
 
+#if DEBUG
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+#else
+            services.AddDbContext<AppDbContext>(opt => opt.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+#endif
             services.AddAutoMapper(typeof(Program));
 
             AddBusinessServices(services);
