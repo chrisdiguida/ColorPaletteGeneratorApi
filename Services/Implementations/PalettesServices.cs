@@ -13,6 +13,12 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IPaletteGeneratorServices _paletteGeneratorServices = paletteGeneratorServices;
 
+        /// <summary>
+        /// Generates a color palette based on the provided hex color for a specific user.
+        /// </summary>
+        /// <param name="appUserRequesterId"></param>
+        /// <param name="hexColor"></param>
+        /// <returns></returns>
         public async Task<PaletteDto> GeneratePalette(Guid appUserRequesterId, string hexColor)
         {
             List<PaletteColorDto> colors = _paletteGeneratorServices.GeneratePalette(hexColor);
@@ -25,6 +31,13 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
             };
         }
 
+        /// <summary>
+        /// Retrieves all palettes for a specific user with optional filtering and pagination.
+        /// </summary>
+        /// <param name="appUserRequesterId"></param>
+        /// <param name="filter"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public async Task<List<PaletteDto>> GetAll(Guid appUserRequesterId, string filter, int page)
         {
             List<Palette> palettes = await _palettesRepository.GetAll(appUserRequesterId, filter, page);
@@ -36,6 +49,13 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
             return paletteDtos;
         }
 
+        /// <summary>
+        /// Creates a new palette for a specific user.
+        /// </summary>
+        /// <param name="appUserRequesterId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <exception cref="ApiException"></exception>
         public async Task Create(Guid appUserRequesterId, CreatePaletteRequestDto request)
         {
             if (await _palettesRepository.Exists(appUserRequesterId, request.BaseColor)) throw new ApiException($"You already created a palette with the base color '{request.BaseColor}'");
@@ -45,6 +65,13 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
             await _unitOfWork.SaveChanges();
         }
 
+        /// <summary>
+        /// Updates the name of an existing palette.
+        /// </summary>
+        /// <param name="appUserRequesterId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <exception cref="ApiException"></exception>
         public async Task UpdateName(Guid appUserRequesterId, UpdatePaletteRequestDto request)
         {
             Palette palette = await _palettesRepository.Get(appUserRequesterId, request.Id) ?? throw new ApiException($"The palette with id '{request.Id}' does not exist.", StatusCodes.Status404NotFound);
@@ -53,6 +80,13 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
             await _unitOfWork.SaveChanges();
         }
 
+        /// <summary>
+        /// Deletes a palette for a specific user.
+        /// </summary>
+        /// <param name="appUserRequesterId"></param>
+        /// <param name="paletteId"></param>
+        /// <returns></returns>
+        /// <exception cref="ApiException"></exception>
         public async Task Delete(Guid appUserRequesterId, Guid paletteId)
         {
             Palette palette = await _palettesRepository.Get(appUserRequesterId, paletteId) ?? throw new ApiException($"The palette with id '{paletteId}' does not exist.", StatusCodes.Status404NotFound);

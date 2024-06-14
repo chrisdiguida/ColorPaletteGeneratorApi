@@ -12,6 +12,10 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
         private readonly IConfiguration _configuration = configuration;
         private readonly SecurityKey _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]));
 
+        /// <summary>
+        /// Generates an authentication token for the specified AppUser.
+        /// </summary>
+        /// <param name="appUser"></param>
         public string GenerateAuthenticationToken(AppUser appUser)
         {
             List<Claim> claims =

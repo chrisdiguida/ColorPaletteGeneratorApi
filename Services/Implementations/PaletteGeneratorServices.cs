@@ -8,6 +8,11 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
     {
         private const int _paletteColors = 9;
 
+        /// <summary>
+        /// Generates a color palette based on the provided hex color.
+        /// </summary>
+        /// <param name="hexColor"></param>
+        /// <returns></returns>
         public List<PaletteColorDto> GeneratePalette(string hexColor)
         {
             List<Color> colors = [];
@@ -27,12 +32,24 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
             return paletteColors;
         }
 
+        /// <summary>
+        /// Adds the base color to the list of colors at the appropriate index based on brightness.
+        /// </summary>
+        /// <param name="colors"></param>
+        /// <param name="baseColor"></param>
+        /// <param name="brightness"></param>
         private static void AddBaseColor(List<Color> colors, Color baseColor, int brightness)
         {
             int index = _paletteColors - brightness;
             colors[index] = baseColor;
         }
 
+        /// <summary>
+        /// Generates a list of lighter colors based on the base color and its brightness.
+        /// </summary>
+        /// <param name="baseColor"></param>
+        /// <param name="brightness"></param>
+        /// <returns></returns>
         private static List<Color> GenerateLighterColors(Color baseColor, int brightness)
         {
             List<Color> colors = [];
@@ -47,6 +64,12 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
             return colors;
         }
 
+        /// <summary>
+        /// Generates a list of darker colors based on the base color and its brightness.
+        /// </summary>
+        /// <param name="baseColor"></param>
+        /// <param name="brightness"></param>
+        /// <returns></returns>
         private static List<Color> GenerateDarkerColors(Color baseColor, int brightness)
         {
             List<Color> colors = [];
@@ -61,6 +84,11 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
             return colors;
         }
 
+        /// <summary>
+        /// Defines the scale factor for changing color brightness based on the correction factor.
+        /// </summary>
+        /// <param name="correctionFactor"></param>
+        /// <returns></returns>
         private static float DefineChangeColorBrightnessScale(int correctionFactor)
         {
             float scale = (float)correctionFactor / 10;
@@ -68,6 +96,11 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
 
         }
 
+        /// <summary>
+        /// Defines the brightness of a given color.
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
         private static int DefineColorBrightness(Color color)
         {
             int brightness = (int)(color.GetBrightness() * 10);
@@ -84,6 +117,12 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
             return brightness;
         }
 
+        /// <summary>
+        /// Changes the brightness of a given color based on the correction factor.
+        /// </summary>
+        /// <param name="color"></param>
+        /// <param name="correctionFactor"></param>
+        /// <returns></returns>
         private static Color ChangeColorBrightness(Color color, float correctionFactor)
         {
             float red = color.R;

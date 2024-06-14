@@ -15,6 +15,11 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
         private readonly IHashingService _hashingService = hashingService;
         private readonly IAuthenticationTokenService _authenticationTokenService = authenticationTokenService;
 
+        /// <summary>
+        /// Registers a new user in the system.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <exception cref="ApiException"></exception>
         public async Task<SignInResponseDto> SignUp(SignUpRequestDto request)
         {
             if (await _appUsersRepository.AppUserExists(request.Email)) throw new ApiException($"User already exists.");
@@ -34,6 +39,11 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
             };
         }
 
+        /// <summary>
+        /// Signs in an existing user.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <exception cref="ApiException"></exception>
         public async Task<SignInResponseDto> SignIn(SignInRequestDto request)
         {
             AppUser appUser = await _appUsersRepository.GetAppUser(request.Email) ?? throw new ApiException($"User with email '{request.Email}' does not exist.", StatusCodes.Status404NotFound);
@@ -51,6 +61,11 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
             };
         }
 
+        /// <summary>
+        /// Gets the current authenticated user.
+        /// </summary>
+        /// <param name="appUserRequesterId"></param>
+        /// <exception cref="ApiException"></exception>
         public async Task<GetCurrentAppUserResponseDto> GetCurrentAppUser(Guid appUserRequesterId)
         {
             AppUser appUser = await _appUsersRepository.GetAppUser(appUserRequesterId) ?? throw new ApiException("User does not exist.", StatusCodes.Status401Unauthorized);
@@ -60,6 +75,11 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
             return _mapper.Map<GetCurrentAppUserResponseDto>(appUser);
         }
 
+        /// <summary>
+        /// Creates a password hash and salt for the specified user.
+        /// </summary>
+        /// <param name="appUser"></param>
+        /// <param name="password"></param>
         private void CreateAppUserPassword(AppUser appUser, string password)
         {
             byte[] appUserPasswordSalt = _hashingService.GenerateKey();
