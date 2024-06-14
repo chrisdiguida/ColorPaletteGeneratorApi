@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace ColorPaletteGeneratorApi.Attributes
 {
+    /// <summary>
+    /// Validates if a string is a valid HEX color (e.g. #FFFFFF).
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
     public class HexColorAttribute() : ValidationAttribute
     {

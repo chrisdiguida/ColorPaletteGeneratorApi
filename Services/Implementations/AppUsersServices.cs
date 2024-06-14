@@ -18,6 +18,7 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
         public async Task<SignInResponseDto> SignUp(SignUpRequestDto request)
         {
             if (await _appUsersRepository.AppUserExists(request.Email)) throw new ApiException($"User already exists.");
+
             AppUser appUser = _mapper.Map<AppUser>(request);
             CreateAppUserPassword(appUser, request.Password);
             appUser.LastSignIn = DateTimeOffset.UtcNow;
@@ -35,7 +36,7 @@ namespace ColorPaletteGeneratorApi.Services.Implementations
 
         public async Task<SignInResponseDto> SignIn(SignInRequestDto request)
         {
-            AppUser appUser = await _appUsersRepository.GetAppUser(request.Email) ?? throw new ApiException("User does not exist.", $"User with email '{request.Email}' does not exist.", StatusCodes.Status404NotFound);
+            AppUser appUser = await _appUsersRepository.GetAppUser(request.Email) ?? throw new ApiException($"User with email '{request.Email}' does not exist.", StatusCodes.Status404NotFound);
             if (!_hashingService.VerifyHash(request.Password, appUser.PasswordSalt, appUser.PasswordHash)) throw new ApiException("Password was incorrect.", StatusCodes.Status401Unauthorized);
             appUser.LastSignIn = DateTimeOffset.UtcNow;
             appUser.LastAppAccess = DateTimeOffset.UtcNow;

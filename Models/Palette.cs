@@ -1,5 +1,4 @@
-﻿using ColorPaletteGeneratorApi.Attributes;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ColorPaletteGeneratorApi.Models
 {
@@ -7,7 +6,7 @@ namespace ColorPaletteGeneratorApi.Models
     {
         public string Name { get; set; }
         [StringLength(7, MinimumLength = 7)]
-        [HexColor]
+        [Required]
         public string BaseColor { get; set; }
         public DateTimeOffset CreationDate { get; set; } = DateTime.UtcNow;
         public Guid AppUserId { get; set; }

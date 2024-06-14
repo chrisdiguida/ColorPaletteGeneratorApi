@@ -1,7 +1,9 @@
-﻿using ColorPaletteGeneratorApi.Dtos;
+﻿using ColorPaletteGeneratorApi.Attributes;
+using ColorPaletteGeneratorApi.Dtos;
 using ColorPaletteGeneratorApi.Extentions;
 using ColorPaletteGeneratorApi.Services.Implementations;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace ColorPaletteGeneratorApi.Controllers
 {
@@ -10,7 +12,7 @@ namespace ColorPaletteGeneratorApi.Controllers
         private readonly IPalettesServices _palettesServices = palettesServices;
 
         [HttpGet]
-        public async Task<ActionResult<PaletteDto>> GeneratePalette(string hexColor)
+        public async Task<ActionResult<PaletteDto>> GeneratePalette([Required][HexColor] string hexColor)
         {
             return Ok(await _palettesServices.GeneratePalette(User.GetAppUserId(), hexColor));
         }
